@@ -87,13 +87,13 @@ export function Education({ data, onChange }) {
             />
           </div>
 
-          <button className="btn-remove" onClick={() => handleRemoveEducation(edu.id)}>
+          <button className="btn btn-danger" onClick={() => handleRemoveEducation(edu.id)}>
             Remove
           </button>
         </div>
       ))}
 
-      <button className="btn-add" onClick={handleAddEducation}>
+      <button className="btn btn-primary" onClick={handleAddEducation}>
         + Add Education
       </button>
     </div>

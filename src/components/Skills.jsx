@@ -42,7 +42,7 @@ export function Skills({ data, onChange }) {
               <option value="expert">Expert</option>
             </select>
             <button 
-              className="btn-remove-skill"
+              className="btn-danger--small"
               onClick={() => handleRemoveSkill(skill.id)}
             >
               ✕
@@ -51,7 +51,7 @@ export function Skills({ data, onChange }) {
         ))}
       </div>
 
-      <button className="btn-add" onClick={handleAddSkill}>
+      <button className="btn btn-primary" onClick={handleAddSkill}>
         + Add Skill
       </button>
     </div>

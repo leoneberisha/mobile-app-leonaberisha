@@ -99,13 +99,13 @@ export function Experience({ data, onChange }) {
             />
           </div>
 
-          <button className="btn-remove" onClick={() => handleRemoveExperience(exp.id)}>
+          <button className="btn btn-danger" onClick={() => handleRemoveExperience(exp.id)}>
             Remove
           </button>
         </div>
       ))}
 
-      <button className="btn-add" onClick={handleAddExperience}>
+      <button className="btn btn-primary" onClick={handleAddExperience}>
         + Add Experience
       </button>
     </div>
