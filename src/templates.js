@@ -28,13 +28,25 @@ export const CVDataTemplate = {
       startDate: '2022-01',
       endDate: '',
       currentlyWorking: true,
-      description: '• Led development of real-time data processing pipeline\n• Mentored 3 junior developers'
+      description: '• Led development of real-time data processing pipeline\n• Mentored 3 junior developers\n• Reduced API response time by 40%'
+    },
+    {
+      id: 3,
+      jobTitle: 'Software Engineer',
+      company: 'StartupXYZ',
+      location: 'Remote',
+      startDate: '2020-06',
+      endDate: '2021-12',
+      currentlyWorking: false,
+      description: '• Built customer dashboard using React and Redux\n• Designed RESTful APIs using Node.js'
     }
   ],
   skills: [
     { id: 4, name: 'JavaScript', level: 'expert' },
     { id: 5, name: 'React', level: 'expert' },
-    { id: 6, name: 'Node.js', level: 'advanced' }
+    { id: 6, name: 'Node.js', level: 'advanced' },
+    { id: 7, name: 'AWS', level: 'advanced' },
+    { id: 8, name: 'SQL', level: 'advanced' }
   ]
 }
 
