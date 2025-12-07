@@ -2,51 +2,38 @@
 // Shared CV Data Template - used by all layout designs
 export const CVDataTemplate = {
   personalInfo: {
-    name: 'Alex Johnson',
-    email: 'alex.johnson@email.com',
-    phone: '+1 (555) 123-4567',
-    location: 'San Francisco, CA',
-    summary: 'Full-stack software engineer with 5+ years of experience building scalable web applications. Proficient in React, Node.js, and cloud technologies.'
+    name: 'John Smith',
+    email: 'john.smith@email.com',
+    phone: '+1 (555) 987-6543',
+    location: 'New York, NY',
+    summary: 'Marketing professional with 5+ years of experience.'
   },
   education: [
     {
       id: 1,
-      school: 'University of California, Berkeley',
-      degree: 'Bachelor of Science',
-      field: 'Computer Science',
-      startDate: '2017-09',
-      endDate: '2021-05',
-      description: 'Relevant coursework: Data Structures, Algorithms, Database Systems'
+      school: 'New York University',
+      degree: 'MBA',
+      field: 'Marketing',
+      startDate: '2015-09',
+      endDate: '2017-05',
+      description: ''
     }
   ],
   experience: [
     {
       id: 2,
-      jobTitle: 'Senior Software Engineer',
-      company: 'Tech Innovations Inc.',
-      location: 'San Francisco, CA',
-      startDate: '2022-01',
+      jobTitle: 'Marketing Manager',
+      company: 'Creative Agency',
+      location: 'New York, NY',
+      startDate: '2020-03',
       endDate: '',
       currentlyWorking: true,
-      description: '• Led development of real-time data processing pipeline\n• Mentored 3 junior developers\n• Reduced API response time by 40%'
-    },
-    {
-      id: 3,
-      jobTitle: 'Software Engineer',
-      company: 'StartupXYZ',
-      location: 'Remote',
-      startDate: '2020-06',
-      endDate: '2021-12',
-      currentlyWorking: false,
-      description: '• Built customer dashboard using React and Redux\n• Designed RESTful APIs using Node.js'
+      description: '• Led digital campaigns\n• Managed marketing team'
     }
   ],
   skills: [
-    { id: 4, name: 'JavaScript', level: 'expert' },
-    { id: 5, name: 'React', level: 'expert' },
-    { id: 6, name: 'Node.js', level: 'advanced' },
-    { id: 7, name: 'AWS', level: 'advanced' },
-    { id: 8, name: 'SQL', level: 'advanced' }
+    { id: 4, name: 'Social Media Marketing', level: 'expert' },
+    { id: 5, name: 'Content Strategy', level: 'advanced' }
   ]
 }
 
