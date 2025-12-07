@@ -6,6 +6,7 @@ import { Experience } from './components/Experience'
 import { Skills } from './components/Skills'
 import { CVPreview } from './components/CVPreview'
 import { CVDataTemplate, CVLayoutTemplates } from './templates'
+import html2pdf from 'html2pdf.js'
 
 function App() {
   const [theme, setTheme] = useState(() => {
@@ -60,10 +61,18 @@ function App() {
     const cvContent = document.querySelector('.cv-preview')
     if (!cvContent) return
     
-    const printWindow = window.open('', '_blank')
-    printWindow.document.write(cvContent.innerHTML)
-    printWindow.document.close()
-    printWindow.print()
+    const cvName = cvData.personalInfo?.name || 'CV'
+    const filename = `${cvName.replace(/\s+/g, '_')}_CV.pdf`
+    
+    const options = {
+      margin: 10,
+      filename: filename,
+      image: { type: 'jpeg', quality: 0.98 },
+      html2canvas: { scale: 2, useCORS: true },
+      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+    }
+    
+    html2pdf().set(options).from(cvContent).save()
   }
 
   return (
@@ -153,7 +162,7 @@ function App() {
               </div>
             </div>
             <button className="btn btn-primary btn-export" onClick={handleExportPDF}>
-              🖨️ Print / Export as PDF
+              💾 Save as PDF
             </button>
           </div>
         )}

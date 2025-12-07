@@ -56,6 +56,8 @@ body {
   min-height: 100vh;
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.06);
   color: var(--text-color);
+  display: flex;
+  flex-direction: column;
 }
 
 .header {
@@ -63,6 +65,9 @@ body {
   padding: 2rem 0;
   border-bottom: 2px solid var(--section-border);
   margin-bottom: 2rem;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .header-top {
@@ -107,6 +112,9 @@ h1 {
   border-bottom: 2px solid var(--border);
   overflow-x: auto;
   padding: 0 0 1rem 0;
+  width: 100%;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .tab {
@@ -137,6 +145,9 @@ h1 {
 /* Content Area */
 .content-area {
   animation: fadeIn 0.3s ease;
+  width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 @keyframes fadeIn {
@@ -153,14 +164,20 @@ h1 {
 /* Form Sections */
 .form-section {
   margin-bottom: 2rem;
+  padding: 2rem;
+  background: var(--preview-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .form-section h2 {
   font-size: 1.5rem;
   color: var(--text-color);
   margin-bottom: 1.5rem;
-  padding-bottom: 1rem;
-  border-bottom: 2px solid var(--section-border);
+  padding-bottom: 0;
+  border-bottom: none;
 }
 
 .form-group {
@@ -270,7 +287,9 @@ h1 {
   display: flex;
   gap: 0.75rem;
   align-items: center;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .preview-controls .layout-control {
@@ -306,63 +325,48 @@ h1 {
   display: flex;
   justify-content: center;
   width: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 .preview-section {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-  padding: 1rem 0 2rem 0;
-}
-
-/* ensure full height centering when preview is shown */
-@media (min-height: 700px) {
-  .preview-section {
-    min-height: calc(100vh - 220px); /* approximate header + tabs area */
-  }
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  width: 100%;
 }
 
 .preview-card {
-  /* match the rest of the content area width by default
-     (use full available width inside the .app wrapper) */
   width: 100%;
   max-width: 100%;
   min-height: 520px;
   background: var(--preview-bg);
   border: 1px solid var(--border);
-  border-radius: 14px;
-  padding: 1rem;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+  border-radius: 8px;
+  padding: 0;
   overflow: auto;
   display: flex;
   align-items: stretch;
+  margin-bottom: 2rem;
 }
 
 .preview-card .cv-preview {
   width: 100%;
   max-width: 100%;
-  padding: 1rem;
-  border-radius: 10px;
-  background: transparent; /* adopt parent preview-card background */
+  padding: 2rem;
+  border-radius: 8px;
+  background: transparent;
   border: none;
 }
-
-/* ensure content in the preview has consistent spacing similar to form sections */
-.cv-preview { padding: 16px; }
 
 /* Larger look & feel for touch */
 .btn { min-height: 48px; min-width: 160px; padding: 0.65rem 1rem }
 
-@media (min-width: 900px) {
-  /* desktop: keep the preview card visually balanced with wider layouts */
-  .preview-card { width: 100%; min-height: 420px }
-}
-
-@media (max-width: 420px) {
-  /* extra small phones */
-  .preview-card { width: calc(100% - 2rem); min-height: 480px }
+@media (max-width: 600px) {
   .preview-controls .layout-select { width: 150px }
 }
 

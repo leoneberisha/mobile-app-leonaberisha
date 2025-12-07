@@ -52,6 +52,6 @@ export const CVLayoutTemplates = {
     description: 'Minimalist design with focus on content'
   },
   twoColumn: {
-    name: 'Two-Column',
-    description: 'Sidebar layout with contact info on left'
+    name: 'Basic',
+    description: 'Basic design'
   }}
