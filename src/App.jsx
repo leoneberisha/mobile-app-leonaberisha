@@ -4,6 +4,7 @@ import { PersonalInfo } from './components/PersonalInfo'
 import { Education } from './components/Education'
 import { Experience } from './components/Experience'
 import { Skills } from './components/Skills'
+import { Projects } from './components/Projects'
 import { CVPreview } from './components/CVPreview'
 import { CVDataTemplate, CVLayoutTemplates } from './templates'
 import html2pdf from 'html2pdf.js'
@@ -38,7 +39,8 @@ function App() {
     },
     education: [],
     experience: [],
-    skills: []
+    skills: [],
+    projects: []
   })
 
   const handlePersonalInfoChange = (data) => {
@@ -55,6 +57,10 @@ function App() {
 
   const handleSkillsChange = (data) => {
     setCvData({ ...cvData, skills: data })
+  }
+
+  const handleProjectsChange = (data) => {
+    setCvData({ ...cvData, projects: data })
   }
 
   const handleExportPDF = () => {
@@ -117,6 +123,12 @@ function App() {
           ⭐ Skills
         </button>
         <button 
+          className={`tab ${activeTab === 'projects' ? 'active' : ''}`}
+          onClick={() => setActiveTab('projects')}
+        >
+          🚀 Projects
+        </button>
+        <button 
           className={`tab ${activeTab === 'preview' ? 'active' : ''}`}
           onClick={() => setActiveTab('preview')}
         >
@@ -139,6 +151,10 @@ function App() {
         
         {activeTab === 'skills' && (
           <Skills data={cvData.skills} onChange={handleSkillsChange} />
+        )}
+        
+        {activeTab === 'projects' && (
+          <Projects data={cvData.projects} onChange={handleProjectsChange} />
         )}
         
         {activeTab === 'preview' && (

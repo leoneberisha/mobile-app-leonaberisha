@@ -34,6 +34,20 @@ export const CVDataTemplate = {
   skills: [
     { id: 4, name: 'Social Media Marketing', level: 'expert' },
     { id: 5, name: 'Content Strategy', level: 'advanced' }
+  ],
+  projects: [
+    {
+      id: 6,
+      name: 'E-commerce Platform',
+      description: 'Built a full-stack e-commerce platform with payment integration and inventory management.',
+      technologies: 'React, Node.js, MongoDB, Stripe'
+    },
+    {
+      id: 7,
+      name: 'Marketing Analytics Dashboard',
+      description: 'Developed an interactive dashboard for tracking campaign performance and ROI metrics.',
+      technologies: 'React, D3.js, Python, PostgreSQL'
+    }
   ]
 }
 

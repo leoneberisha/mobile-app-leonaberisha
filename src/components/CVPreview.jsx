@@ -99,6 +99,24 @@ export function CVPreview({ cvData, layout }) {
           </div>
         </div>
       )}
+
+      {/* Projects */}
+      {cvData.projects?.length > 0 && (
+        <div className="cv-section">
+          <h3>Projects</h3>
+          {cvData.projects.map((project) => (
+            <div key={project.id} className="cv-entry">
+              <div className="cv-entry-header">
+                <div>
+                  <h4>{project.name}</h4>
+                  {project.technologies && <p className="technologies">{project.technologies}</p>}
+                </div>
+              </div>
+              {project.description && <p className="description">{project.description}</p>}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
