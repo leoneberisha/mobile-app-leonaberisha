@@ -1,4 +1,3 @@
-
 // Shared CV Data Template - used by all layout designs
 export const CVDataTemplate = {
   personalInfo: {
@@ -35,15 +34,23 @@ export const CVDataTemplate = {
     { id: 4, name: 'Social Media Marketing', level: 'expert' },
     { id: 5, name: 'Content Strategy', level: 'advanced' }
   ],
+  languages: [
+    { id: 6, name: 'English', level: 'native' },
+    { id: 7, name: 'Spanish', level: 'intermediate' }
+  ],
+  interests: [
+    { id: 8, name: 'Photography' },
+    { id: 9, name: 'Travel' }
+  ],
   projects: [
     {
-      id: 6,
+      id: 10,
       name: 'E-commerce Platform',
       description: 'Built a full-stack e-commerce platform with payment integration and inventory management.',
       technologies: 'React, Node.js, MongoDB, Stripe'
     },
     {
-      id: 7,
+      id: 11,
       name: 'Marketing Analytics Dashboard',
       description: 'Developed an interactive dashboard for tracking campaign performance and ROI metrics.',
       technologies: 'React, D3.js, Python, PostgreSQL'
@@ -66,6 +73,23 @@ export const CVLayoutTemplates = {
     description: 'Minimalist design with focus on content'
   },
   twoColumn: {
-    name: 'Basic',
-    description: 'Basic design'
-  }}
+    name: 'Two Column',
+    description: 'Sidebar layout with skills on side'
+  },
+  creative: {
+    name: 'Creative',
+    description: 'Bold design with colorful accents'
+  },
+  executive: {
+    name: 'Executive',
+    description: 'Premium layout for senior roles'
+  },
+  academic: {
+    name: 'Academic',
+    description: 'Research-focused with detailed formatting'
+  },
+  compact: {
+    name: 'Compact',
+    description: 'Space-efficient single page design'
+  }
+}

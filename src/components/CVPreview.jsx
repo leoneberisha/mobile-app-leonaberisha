@@ -1,4 +1,4 @@
-export function CVPreview({ cvData, layout }) {
+export function CVPreview({ cvData, layout, customization = {} }) {
   const layoutClass = layout ? layout.replace(/([A-Z])/g, '-$1').toLowerCase() : ''
   const formatDate = (dateStr) => {
     if (!dateStr) return ''
@@ -7,8 +7,15 @@ export function CVPreview({ cvData, layout }) {
     return date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })
   }
 
+  const customStyle = {
+    '--custom-accent': customization.accentColor || '#667eea',
+    '--custom-heading-font': customization.headingFont || 'Arial',
+    '--custom-body-font': customization.bodyFont || 'Arial',
+    '--custom-text-color': customization.textColor || '#222222'
+  }
+
   return (
-    <div className={`cv-preview ${layoutClass}`}>
+    <div className={`cv-preview ${layoutClass}`} style={customStyle}>
       {/* Header */}
       <div className="cv-header">
         <h1>{cvData.personalInfo?.name || 'Your Name'}</h1>
@@ -94,6 +101,34 @@ export function CVPreview({ cvData, layout }) {
             {cvData.skills.map((skill) => (
               <span key={skill.id} className={`skill-badge level-${skill.level}`}>
                 {skill.name}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Languages */}
+      {cvData.languages?.length > 0 && (
+        <div className="cv-section">
+          <h3>Languages</h3>
+          <div className="skills-list">
+            {cvData.languages.map((lang) => (
+              <span key={lang.id} className={`skill-badge level-${lang.level}`}>
+                {lang.name} {lang.level ? `(${lang.level})` : ''}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Interests */}
+      {cvData.interests?.length > 0 && (
+        <div className="cv-section">
+          <h3>Interests</h3>
+          <div className="skills-list">
+            {cvData.interests.map((interest) => (
+              <span key={interest.id} className="skill-badge">
+                {interest.name}
               </span>
             ))}
           </div>
