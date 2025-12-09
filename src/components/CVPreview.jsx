@@ -8,10 +8,10 @@ export function CVPreview({ cvData, layout, customization = {} }) {
   }
 
   const customStyle = {
-    '--custom-accent': customization.accentColor || '#667eea',
+    '--custom-accent': customization.accentColor || 'var(--accent-start)',
     '--custom-heading-font': customization.headingFont || 'Arial',
     '--custom-body-font': customization.bodyFont || 'Arial',
-    '--custom-text-color': customization.textColor || '#222222'
+    '--custom-text-color': customization.textColor || 'var(--text-color)'
   }
 
   return (

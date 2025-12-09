@@ -7,7 +7,6 @@ import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
 import { Auth } from './components/Auth'
 import { CVPreview } from './components/CVPreview'
-import { TemplateCustomizer } from './components/TemplateCustomizer'
 import { CVDataTemplate, CVLayoutTemplates } from './templates'
 import { getCurrentUser, getCVData, saveCVData } from './config/supabase'
 import html2pdf from 'html2pdf.js'
@@ -46,7 +45,7 @@ function App() {
     checkAuth()
   }, [])
 
-  const [theme, setThemeState] = useState(() => localStorage.getItem('theme') || 'light')
+  const [theme, setThemeState] = useState(() => localStorage.getItem('theme') || 'dark')
   
   const setTheme = (newTheme) => {
     try {
@@ -58,14 +57,16 @@ function App() {
     }
   }
 
+  useEffect(() => {
+    try {
+      document.documentElement.setAttribute('data-theme', theme)
+    } catch {
+      // ignore
+    }
+  }, [theme])
+
   const [activeTab, setActiveTab] = useState('personal')
   const [cvLayout, setCvLayout] = useState(Object.keys(CVLayoutTemplates)[0] || 'modern')
-  const [customization, setCustomization] = useState({
-    accentColor: '#667eea',
-    headingFont: 'Arial',
-    bodyFont: 'Arial',
-    textColor: '#222222'
-  })
   const [cvData, setCvData] = useState({
     personalInfo: {
       name: '',
@@ -255,9 +256,6 @@ function App() {
           <Projects data={cvData.projects} onChange={handleProjectsChange} />
         )}
 
-        {activeTab === 'personal' && (
-          <TemplateCustomizer customization={customization} onChange={setCustomization} />
-        )}
         
         {activeTab === 'preview' && (
           <div className="preview-section">
@@ -276,7 +274,7 @@ function App() {
 
             <div className="preview-frame">
               <div className="preview-card">
-                <CVPreview cvData={cvData} layout={cvLayout} customization={customization} />
+                <CVPreview cvData={cvData} layout={cvLayout} />
               </div>
             </div>
             <button className="btn btn-primary btn-export" onClick={handleExportPDF}>
