@@ -1,16 +1,59 @@
-# React + Vite
+# CV Builder Mobile App 📄
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive CV/Resume builder application with real-time preview, multiple templates, and cloud synchronization.
 
-Currently, two official plugins are available:
+## 🌟 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **User Authentication** - Secure sign up/sign in with Supabase
+- **Real-time Preview** - See your CV update as you type
+- **Multiple Templates** - Choose from 8 professional CV layouts
+- **Auto-save** - Your data is automatically saved to the cloud
+- **PDF Export** - Download your CV as a professional PDF
+- **Dark/Light Theme** - Toggle between themes for comfortable editing
+- **Responsive Design** - Works seamlessly on mobile, tablet, and desktop
 
-## React Compiler
+## 🚀 Quick Start
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+1. **Install dependencies**
+   ```bash
+   npm install
+   ```
 
-## Expanding the ESLint configuration
+2. **Set up environment variables**
+   
+   Copy `.env.example` to `.env` and add your Supabase credentials:
+   ```env
+   VITE_SUPABASE_URL=your_supabase_project_url
+   VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+3. **Start development server**
+   ```bash
+   npm start
+   ```
+
+4. **Open browser**
+   Navigate to `http://localhost:5173`
+
+## 📚 Full Documentation
+
+See the [main README](../README.md) in the root directory for complete setup instructions, Supabase configuration, and project details.
+
+## 🛠️ Available Scripts
+
+- `npm start` - Start development server
+- `npm run dev` - Start development server (alias)
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
+
+## 🎨 Tech Stack
+
+- React 19.1.1
+- Vite 7.1.7
+- Supabase
+- html2pdf.js
+
+---
+
+Built with ❤️ using React and Vite
