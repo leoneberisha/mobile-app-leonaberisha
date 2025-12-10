@@ -1,12 +1,25 @@
 import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL || 'YOUR_SUPABASE_URL'
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY || 'YOUR_SUPABASE_ANON_KEY'
+const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY
 
-export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY)
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  console.error('Missing Supabase credentials. Please set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY in your .env file')
+}
+
+export const supabase = createClient(
+  SUPABASE_URL || 'https://placeholder.supabase.co',
+  SUPABASE_ANON_KEY || 'placeholder-key'
+)
 
 // Auth functions
 export const signUpUser = async (email, password) => {
+  if (!email || !password) {
+    return { data: null, error: { message: 'Email and password are required' } }
+  }
+  if (password.length < 6) {
+    return { data: null, error: { message: 'Password must be at least 6 characters' } }
+  }
   const { data, error } = await supabase.auth.signUp({
     email,
     password
@@ -15,6 +28,9 @@ export const signUpUser = async (email, password) => {
 }
 
 export const signInUser = async (email, password) => {
+  if (!email || !password) {
+    return { data: null, error: { message: 'Email and password are required' } }
+  }
   const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
