@@ -147,6 +147,42 @@ function App() {
     html2pdf().set(options).from(cvContent).save()
   }
 
+  const handleExportJSON = () => {
+    const dataStr = JSON.stringify(cvData, null, 2)
+    const dataBlob = new Blob([dataStr], { type: 'application/json' })
+    const url = URL.createObjectURL(dataBlob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${cvData.personalInfo?.name || 'CV'}_data.json`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  const handleImportJSON = (event) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e) => {
+      try {
+        const importedData = JSON.parse(e.target.result)
+        // Validate the structure
+        if (importedData.personalInfo || importedData.education || importedData.experience) {
+          setCvData(importedData)
+          alert('✅ CV data imported successfully!')
+        } else {
+          alert('❌ Invalid CV data format')
+        }
+      } catch (error) {
+        console.error('Import error:', error)
+        alert('❌ Failed to import CV data. Please check the file format.')
+      }
+    }
+    reader.readAsText(file)
+    // Reset input so the same file can be selected again
+    event.target.value = ''
+  }
+
   // Show loading state while checking auth
   if (loading) {
     return (
@@ -261,7 +297,7 @@ function App() {
           <div className="preview-section">
             <div className="preview-controls">
               <button className="btn btn-primary" onClick={() => setCvData(CVDataTemplate)}>Load Sample CV</button>
-              <button className="btn btn-primary" onClick={() => setCvData({ personalInfo: { name: '', email: '', phone: '', location: '', summary: '' }, education: [], experience: [], skills: [] })}>Start Blank</button>
+              <button className="btn btn-primary" onClick={() => setCvData({ personalInfo: { name: '', email: '', phone: '', location: '', summary: '' }, education: [], experience: [], skills: [], languages: [], interests: [], projects: [] })}>Start Blank</button>
               <div className="layout-control">
                 <label className="layout-label">Layout</label>
                 <select value={cvLayout} onChange={(e) => setCvLayout(e.target.value)} className="layout-select">
