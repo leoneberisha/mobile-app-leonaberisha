@@ -110,11 +110,12 @@ h1 {
   gap: 0.5rem;
   margin-bottom: 3rem;
   border-bottom: 2px solid var(--border);
-  overflow-x: hidden;
+  overflow-x: auto;
   padding: 0 0 1rem 0;
   width: 100%;
   margin-left: 0;
   margin-right: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tab {
@@ -1086,3 +1087,133 @@ h1 {
   background: #ff5252;
   transform: translateY(-1px);
 }
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  .app {
+    padding: 1rem;
+  }
+
+  h1 {
+    font-size: 3rem;
+  }
+
+  .subtitle {
+    font-size: 1.5rem;
+  }
+
+  .header {
+    padding: 1.5rem 0;
+  }
+
+  .header-top {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .tabs {
+    gap: 0.25rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab {
+    padding: 1rem 0.75rem;
+    font-size: 1.2rem;
+    min-width: 80px;
+  }
+
+  .form-section {
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+
+  .form-section h2 {
+    font-size: 2rem;
+  }
+
+  .form-group label {
+    font-size: 1.2rem;
+  }
+
+  .form-group input,
+  .form-group textarea,
+  .form-group select {
+    font-size: 1rem;
+    padding: 0.6rem;
+  }
+
+  .btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+  }
+
+  .entry-item {
+    padding: 1rem;
+  }
+
+  .entry-header h3 {
+    font-size: 1.2rem;
+  }
+
+  .preview-controls {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .cv-preview {
+    font-size: 0.85rem;
+    padding: 1rem;
+  }
+
+  .cv-header h1 {
+    font-size: 1.5rem;
+  }
+
+  .cv-section h3 {
+    font-size: 1.1rem;
+  }
+
+  .auth-card {
+    padding: 1.5rem;
+    width: 95%;
+  }
+
+  .theme-toggle {
+    padding: 0.5rem 0.6rem;
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .app {
+    padding: 0.5rem;
+  }
+
+  h1 {
+    font-size: 2rem;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+  }
+
+  .tab {
+    font-size: 0.9rem;
+    padding: 0.75rem 0.5rem;
+    min-width: 60px;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+
+  .entry-actions {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .entry-actions button {
+    width: 100%;
+  }
+}
+
