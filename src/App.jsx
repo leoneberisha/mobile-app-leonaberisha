@@ -2,19 +2,19 @@ import { useState, useEffect } from 'react'
 import './App.css'
 import { PersonalInfo } from './components/PersonalInfo'
 import { Education } from './components/Education'
-import { Experience } from './components/Experience'
 import { Skills } from './components/Skills'
-import { Projects } from './components/Projects'
+import { Experience } from './components/Experience'
 import { Auth } from './components/Auth'
-import { CVPreview } from './components/CVPreview'
-import { CVDataTemplate, CVLayoutTemplates } from './templates'
 import { getCurrentUser, getCVData, saveCVData } from './config/supabase'
-import html2pdf from 'html2pdf.js'
+import { generateCVOffline } from './lib/cvGenerator'
 
 function App() {
   const [user, setUser] = useState(null)
   const [loading, setLoading] = useState(true)
   const [syncing, setSyncing] = useState(false)
+  const [generating, setGenerating] = useState(false)
+  const [generatedCV, setGeneratedCV] = useState(null)
+  const [cvError, setCvError] = useState(null)
 
   // Check auth status on mount
   useEffect(() => {
@@ -65,8 +65,6 @@ function App() {
     }
   }, [theme])
 
-  const [activeTab, setActiveTab] = useState('personal')
-  const [cvLayout, setCvLayout] = useState(Object.keys(CVLayoutTemplates)[0] || 'modern')
   const [cvData, setCvData] = useState({
     personalInfo: {
       name: '',
@@ -76,11 +74,10 @@ function App() {
       summary: ''
     },
     education: [],
-    experience: [],
     skills: [],
     languages: [],
     interests: [],
-    projects: []
+    experience: []
   })
 
   // Auto-save CV data to Supabase
@@ -109,10 +106,6 @@ function App() {
     setCvData({ ...cvData, education: data })
   }
 
-  const handleExperienceChange = (data) => {
-    setCvData({ ...cvData, experience: data })
-  }
-
   const handleSkillsChange = (data) => {
     setCvData({ ...cvData, skills: data })
   }
@@ -125,62 +118,37 @@ function App() {
     setCvData({ ...cvData, interests: data })
   }
 
-  const handleProjectsChange = (data) => {
-    setCvData({ ...cvData, projects: data })
+  const handleExperienceChange = (data) => {
+    setCvData({ ...cvData, experience: data })
   }
 
-  const handleExportPDF = () => {
-    const cvContent = document.querySelector('.cv-preview')
-    if (!cvContent) return
-    
-    const cvName = cvData.personalInfo?.name || 'CV'
-    const filename = `${cvName.replace(/\s+/g, '_')}_CV.pdf`
-    
-    const options = {
-      margin: 10,
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: { scale: 2, useCORS: true },
-      jsPDF: { unit: 'mm', format: 'a4', orientation: 'portrait' }
+  const handleGenerateCV = () => {
+    setCvError(null)
+    setGenerating(true)
+    try {
+      const result = generateCVOffline({
+        name: cvData.personalInfo.name,
+        email: cvData.personalInfo.email,
+        phone: cvData.personalInfo.phone,
+        location: cvData.personalInfo.location,
+        personalSummary: cvData.personalInfo.summary,
+        education: cvData.education,
+        skills: cvData.skills,
+        experience: cvData.experience
+      })
+      setGeneratedCV(result.text)
+      
+      // Open in new tab with formatted HTML
+      const blob = new Blob([result.html], { type: 'text/html' })
+      const url = URL.createObjectURL(blob)
+      window.open(url, '_blank')
+      setTimeout(() => URL.revokeObjectURL(url), 30000)
+    } catch (error) {
+      setCvError(error.message || 'Failed to generate CV')
+      console.error('CV Generation Error:', error)
+    } finally {
+      setGenerating(false)
     }
-    
-    html2pdf().set(options).from(cvContent).save()
-  }
-
-  const handleExportJSON = () => {
-    const dataStr = JSON.stringify(cvData, null, 2)
-    const dataBlob = new Blob([dataStr], { type: 'application/json' })
-    const url = URL.createObjectURL(dataBlob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${cvData.personalInfo?.name || 'CV'}_data.json`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
-  const handleImportJSON = (event) => {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onload = (e) => {
-      try {
-        const importedData = JSON.parse(e.target.result)
-        // Validate the structure
-        if (importedData.personalInfo || importedData.education || importedData.experience) {
-          setCvData(importedData)
-          alert('✅ CV data imported successfully!')
-        } else {
-          alert('❌ Invalid CV data format')
-        }
-      } catch (error) {
-        console.error('Import error:', error)
-        alert('❌ Failed to import CV data. Please check the file format.')
-      }
-    }
-    reader.readAsText(file)
-    // Reset input so the same file can be selected again
-    event.target.value = ''
   }
 
   // Show loading state while checking auth
@@ -209,7 +177,7 @@ function App() {
     <div className="app">
       <div className="header">
         <div className="header-top">
-          <h1>📄 CV Builder</h1>
+          <h1>📄 AI CV Builder</h1>
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', marginLeft: 'auto' }}>
             {syncing && <span style={{ fontSize: '0.8rem', color: 'var(--muted)' }}>💾 Saving...</span>}
             <button
@@ -222,105 +190,80 @@ function App() {
             <Auth user={user} onAuthChange={() => window.location.reload()} />
           </div>
         </div>
-        <p className="subtitle">Create a professional resume in minutes</p>
+        <p className="subtitle">Build a professional CV powered by AI in minutes</p>
       </div>
 
-      <div className="tabs">
-        <button 
-          className={`tab ${activeTab === 'personal' ? 'active' : ''}`}
-          onClick={() => setActiveTab('personal')}
-        >
-          👤 Personal
-        </button>
-        <button 
-          className={`tab ${activeTab === 'education' ? 'active' : ''}`}
-          onClick={() => setActiveTab('education')}
-        >
-          🎓 Education
-        </button>
-        <button 
-          className={`tab ${activeTab === 'experience' ? 'active' : ''}`}
-          onClick={() => setActiveTab('experience')}
-        >
-          💼 Experience
-        </button>
-        <button 
-          className={`tab ${activeTab === 'skills' ? 'active' : ''}`}
-          onClick={() => setActiveTab('skills')}
-        >
-          ⭐ Skills
-        </button>
-        <button 
-          className={`tab ${activeTab === 'projects' ? 'active' : ''}`}
-          onClick={() => setActiveTab('projects')}
-        >
-          🚀 Projects
-        </button>
-        <button 
-          className={`tab ${activeTab === 'preview' ? 'active' : ''}`}
-          onClick={() => setActiveTab('preview')}
-        >
-          👁️ Preview
-        </button>
-      </div>
+      <div className="content-area" style={{ maxWidth: '800px', margin: '0 auto', padding: '2rem 1rem' }}>
+        {/* Personal Information Section */}
+        <PersonalInfo data={cvData.personalInfo} onChange={handlePersonalInfoChange} />
 
-      <div className="content-area">
-        {activeTab === 'personal' && (
-          <PersonalInfo data={cvData.personalInfo} onChange={handlePersonalInfoChange} />
-        )}
-        
-        {activeTab === 'education' && (
-          <Education data={cvData.education} onChange={handleEducationChange} />
-        )}
-        
-        {activeTab === 'experience' && (
-          <Experience data={cvData.experience} onChange={handleExperienceChange} />
-        )}
-        
-        {activeTab === 'skills' && (
-          <Skills
-            skills={cvData.skills}
-            languages={cvData.languages}
-            interests={cvData.interests}
-            onSkillsChange={handleSkillsChange}
-            onLanguagesChange={handleLanguagesChange}
-            onInterestsChange={handleInterestsChange}
-          />
-        )}
-        
-        {activeTab === 'projects' && (
-          <Projects data={cvData.projects} onChange={handleProjectsChange} />
-        )}
+        {/* Education Section */}
+        <Education data={cvData.education} onChange={handleEducationChange} />
 
-        
-        {activeTab === 'preview' && (
-          <div className="preview-section">
-            <div className="preview-controls">
-              <button className="btn btn-primary" onClick={() => setCvData(CVDataTemplate)}>Load Sample CV</button>
-              <button className="btn btn-primary" onClick={() => setCvData({ personalInfo: { name: '', email: '', phone: '', location: '', summary: '' }, education: [], experience: [], skills: [], languages: [], interests: [], projects: [] })}>Start Blank</button>
-              <div className="layout-control">
-                <label className="layout-label">Layout</label>
-                <select value={cvLayout} onChange={(e) => setCvLayout(e.target.value)} className="layout-select">
-                  {Object.entries(CVLayoutTemplates).map(([key, meta]) => (
-                    <option key={key} value={key}>{meta.name}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+        {/* Skills Section */}
+        <Skills
+          skills={cvData.skills}
+          languages={cvData.languages}
+          interests={cvData.interests}
+          onSkillsChange={handleSkillsChange}
+          onLanguagesChange={handleLanguagesChange}
+          onInterestsChange={handleInterestsChange}
+        />
 
-            <div className="preview-frame">
-              <div className="preview-card">
-                <CVPreview cvData={cvData} layout={cvLayout} />
-              </div>
-            </div>
-            <button className="btn btn-primary btn-export" onClick={handleExportPDF}>
-              💾 Save as PDF
+        {/* Experience Section */}
+        <Experience
+          data={cvData.experience}
+          onChange={handleExperienceChange}
+        />
+
+        {/* Generate CV Section */}
+        <div className="form-section" style={{ marginTop: '2rem' }}>
+          <div style={{ display: 'flex', gap: '1rem', alignItems: 'center', justifyContent: 'space-between', marginBottom: '1rem' }}>
+            <h2 style={{ margin: 0 }}>🚀 Generate Professional CV</h2>
+            <button 
+              className="btn btn-primary" 
+              onClick={handleGenerateCV}
+              disabled={generating || !cvData.personalInfo.name}
+              style={{ opacity: generating || !cvData.personalInfo.name ? 0.6 : 1, cursor: generating ? 'not-allowed' : 'pointer' }}
+            >
+              {generating ? '⏳ Generating...' : '✨ Generate CV'}
             </button>
           </div>
-        )}
+
+          {cvError && (
+            <div style={{
+              padding: '1rem',
+              backgroundColor: '#ffebee',
+              color: '#c62828',
+              borderRadius: '8px',
+              marginBottom: '1rem',
+              fontSize: '0.9rem'
+            }}>
+              ❌ {cvError}
+            </div>
+          )}
+
+          {generatedCV && (
+            <div style={{
+              padding: '1rem',
+              backgroundColor: 'var(--input-bg)',
+              borderRadius: '8px',
+              marginTop: '1rem',
+              fontSize: '0.9rem',
+              color: 'var(--text-secondary)'
+            }}>
+              ✅ CV generated successfully! Opening in a new tab...
+            </div>
+          )}
+
+          <p style={{ color: 'var(--text-secondary)', fontSize: '0.9rem', marginTop: '0.5rem' }}>
+            ℹ️ Powered by intelligent rule-based generation (no API needed). Fill in your details and click "Generate CV" to create a professional, job-market-ready CV.
+          </p>
+        </div>
       </div>
     </div>
   )
+
 }
 
 export default App
