@@ -9,12 +9,25 @@ export function Auth({ user, onAuthChange }) {
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
 
+  const handleLogout = async () => {
+    setLoading(true)
+    // Clear local storage and set signed out flag
+    localStorage.removeItem('cv_data')
+    localStorage.setItem('signed_out', 'true')
+    await signOutUser()
+    // Force page reload to reset state
+    window.location.reload()
+  }
+
   const handleAuth = async (e) => {
     e.preventDefault()
     setLoading(true)
     setError('')
     setSuccess('')
 
+    // Clear signed out flag on login
+    localStorage.removeItem('signed_out')
+    
     try {
       const authFn = isSignUp ? signUpUser : signInUser
       const { data, error: authError } = await authFn(email, password)
@@ -42,13 +55,11 @@ export function Auth({ user, onAuthChange }) {
 
   const handleLogout = async () => {
     setLoading(true)
-    const { error } = await signOutUser()
-    if (!error) {
-      onAuthChange()
-    } else {
-      setError(error.message)
-    }
-    setLoading(false)
+    // Clear local storage on logout
+    localStorage.removeItem('cv_data')
+    await signOutUser()
+    // Force page reload to reset state
+    window.location.reload()
   }
 
   if (user) {
