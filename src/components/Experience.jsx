@@ -1,62 +1,113 @@
-export function Experience({ data = [], onChange = () => {} }) {
-  const handleAdd = () => {
-    onChange([
-      ...data,
-      { id: Date.now(), title: '', years: '' }
-    ])
+export function Experience({ data, onChange }) {
+  const handleAddExperience = () => {
+    onChange([...data, {
+      id: Date.now(),
+      jobTitle: '',
+      company: '',
+      location: '',
+      startDate: '',
+      endDate: '',
+      currentlyWorking: false,
+      description: ''
+    }])
   }
 
-  const handleUpdate = (id, field, value) => {
-    onChange(data.map(item =>
-      item.id === id ? { ...item, [field]: value } : item
+  const handleUpdateExperience = (id, field, value) => {
+    onChange(data.map(exp =>
+      exp.id === id ? { ...exp, [field]: value } : exp
     ))
   }
 
-  const handleRemove = (id) => {
-    onChange(data.filter(item => item.id !== id))
+  const handleRemoveExperience = (id) => {
+    onChange(data.filter(exp => exp.id !== id))
   }
 
   return (
     <div className="form-section">
-      <h2>💼 Experience</h2>
+      <h2>💼 Work Experience</h2>
 
-      <div className="section-block">
-        <div className="section-header">
-          <button className="btn btn-primary" onClick={handleAdd}>
-            + Add Experience
-          </button>
-        </div>
-
-        <div className="skills-grid">
-          {data.map((item) => (
-            <div key={item.id} className="skill-item">
+      {data.map((exp) => (
+        <div key={exp.id} className="entry-card">
+          <div className="form-row">
+            <div className="form-group">
+              <label>Job Title *</label>
               <input
                 type="text"
-                placeholder="Experience title (e.g., Software Developer, Project Manager)"
-                value={item.title || ''}
-                onChange={(e) => handleUpdate(item.id, 'title', e.target.value)}
-                className="skill-input"
+                placeholder="Senior Developer"
+                value={exp.jobTitle || ''}
+                onChange={(e) => handleUpdateExperience(exp.id, 'jobTitle', e.target.value)}
               />
-              <input
-                type="number"
-                placeholder="Years"
-                min="0"
-                max="50"
-                value={item.years || ''}
-                onChange={(e) => handleUpdate(item.id, 'years', e.target.value)}
-                className="years-input"
-                style={{ width: '120px' }}
-              />
-              <button
-                className="btn-danger--small"
-                onClick={() => handleRemove(item.id)}
-              >
-                ✕
-              </button>
             </div>
-          ))}
+            <div className="form-group">
+              <label>Company *</label>
+              <input
+                type="text"
+                placeholder="Company Name"
+                value={exp.company || ''}
+                onChange={(e) => handleUpdateExperience(exp.id, 'company', e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className="form-group">
+            <label>Location</label>
+            <input
+              type="text"
+              placeholder="City, State"
+              value={exp.location || ''}
+              onChange={(e) => handleUpdateExperience(exp.id, 'location', e.target.value)}
+            />
+          </div>
+
+          <div className="form-row">
+            <div className="form-group">
+              <label>Start Date</label>
+              <input
+                type="month"
+                value={exp.startDate || ''}
+                onChange={(e) => handleUpdateExperience(exp.id, 'startDate', e.target.value)}
+              />
+            </div>
+            <div className="form-group">
+              <label>End Date</label>
+              <input
+                type="month"
+                value={exp.endDate || ''}
+                onChange={(e) => handleUpdateExperience(exp.id, 'endDate', e.target.value)}
+                disabled={exp.currentlyWorking}
+              />
+            </div>
+          </div>
+
+          <div className="form-group checkbox">
+            <input
+              type="checkbox"
+              id={`current-${exp.id}`}
+              checked={exp.currentlyWorking || false}
+              onChange={(e) => handleUpdateExperience(exp.id, 'currentlyWorking', e.target.checked)}
+            />
+            <label htmlFor={`current-${exp.id}`}>I currently work here</label>
+          </div>
+
+          <div className="form-group">
+            <label>Description</label>
+            <textarea
+              placeholder="Key responsibilities and achievements..."
+              value={exp.description || ''}
+              onChange={(e) => handleUpdateExperience(exp.id, 'description', e.target.value)}
+              rows="4"
+            />
+          </div>
+
+          <button className="btn btn-danger" onClick={() => handleRemoveExperience(exp.id)}>
+            Remove
+          </button>
         </div>
-      </div>
+      ))}
+
+      <button className="btn btn-primary" onClick={handleAddExperience}>
+        + Add Experience
+      </button>
     </div>
   )
 }
