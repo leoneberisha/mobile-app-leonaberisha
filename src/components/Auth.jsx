@@ -13,6 +13,7 @@ export function Auth({ user, onAuthChange }) {
     setLoading(true)
     // Clear local storage and set signed out flag
     localStorage.removeItem('cv_data')
+    localStorage.removeItem('user_email')
     localStorage.setItem('signed_out', 'true')
     await signOutUser()
     // Force page reload to reset state
@@ -25,47 +26,18 @@ export function Auth({ user, onAuthChange }) {
     setError('')
     setSuccess('')
 
-    // Clear signed out flag on login
-    localStorage.removeItem('signed_out')
-    
-    try {
-      const authFn = isSignUp ? signUpUser : signInUser
-      const { data, error: authError } = await authFn(email, password)
-
-      if (authError) {
-        setError(authError.message || 'Authentication failed')
-      } else {
-        if (isSignUp) {
-          setSuccess('Account created! Please sign in.')
-          setIsSignUp(false)
-          setEmail('')
-          setPassword('')
-        } else {
-          setSuccess('Signed in successfully!')
-          setTimeout(() => onAuthChange(), 1000)
-        }
-      }
-    } catch (err) {
-      setError(err.message || 'An error occurred')
-      console.error('Auth error:', err)
-    } finally {
-      setLoading(false)
+    // Local mode - save email and clear signed out flag
+    if (email) {
+      localStorage.setItem('user_email', email)
     }
-  }
-
-  const handleLogout = async () => {
-    setLoading(true)
-    // Clear local storage on logout
-    localStorage.removeItem('cv_data')
-    await signOutUser()
-    // Force page reload to reset state
-    window.location.reload()
+    localStorage.removeItem('signed_out')
+    setSuccess('Signed in successfully!')
+    setTimeout(() => window.location.reload(), 500)
   }
 
   if (user) {
     return (
       <div className="auth-section">
-        <span>👤 {user.email}</span>
         <button 
           className="btn btn-logout" 
           onClick={handleLogout}
