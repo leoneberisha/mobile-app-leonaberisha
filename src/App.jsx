@@ -7,6 +7,7 @@ import { Skills } from './components/Skills'
 import { Projects } from './components/Projects'
 import { Auth } from './components/Auth'
 import { CVPreview } from './components/CVPreview'
+import { AISuggestions } from './components/AISuggestions'
 import { CVDataTemplate, CVLayoutTemplates } from './templates'
 import { getCurrentUser, getCVData, saveCVData } from './config/supabase'
 import html2pdf from 'html2pdf.js'
@@ -27,7 +28,8 @@ function App() {
     }
     
     // Auto-login as local user for offline mode
-    setUser({ id: 'local-user', email: 'local@example.com' })
+    const userEmail = localStorage.getItem('user_email') || 'guest@example.com'
+    setUser({ id: 'local-user', email: userEmail })
     
     // Load CV data from localStorage
     try {
@@ -255,6 +257,12 @@ function App() {
           🚀 Projects
         </button>
         <button 
+          className={`tab ${activeTab === 'ai' ? 'active' : ''}`}
+          onClick={() => setActiveTab('ai')}
+        >
+          🤖 AI Help
+        </button>
+        <button 
           className={`tab ${activeTab === 'preview' ? 'active' : ''}`}
           onClick={() => setActiveTab('preview')}
         >
@@ -290,6 +298,9 @@ function App() {
           <Projects data={cvData.projects} onChange={handleProjectsChange} />
         )}
 
+        {activeTab === 'ai' && (
+          <AISuggestions cvData={cvData} />
+        )}
         
         {activeTab === 'preview' && (
           <div className="preview-section">
